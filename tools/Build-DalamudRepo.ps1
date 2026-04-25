@@ -51,6 +51,34 @@ function Read-JsonManifest {
     return Get-Content $Path -Raw | ConvertFrom-Json
 }
 
+function Read-ZipManifest {
+    param(
+        [string]$ZipPath,
+        [string]$InternalName
+    )
+
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($ZipPath)
+    try {
+        $entryName = "$InternalName.json"
+        $entry = $archive.Entries | Where-Object { $_.FullName -eq $entryName } | Select-Object -First 1
+        if (-not $entry) {
+            return $null
+        }
+
+        $reader = New-Object System.IO.StreamReader($entry.Open())
+        try {
+            $json = $reader.ReadToEnd()
+        } finally {
+            $reader.Dispose()
+        }
+
+        return $json | ConvertFrom-Json
+    } finally {
+        $archive.Dispose()
+    }
+}
+
 function Read-SimpleYamlManifest {
     param([string]$Path)
 
@@ -155,7 +183,6 @@ function Get-ProjectEntry {
         throw "Could not find matching .csproj under $($ProjectDir.FullName)"
     }
 
-    $version = Read-CsprojVersion -CsprojPath $csproj.FullName
     $manifest = $manifestInfo.Data
 
     $internalName = if ($manifest.PSObject.Properties.Name -contains "InternalName") {
@@ -174,6 +201,14 @@ function Get-ProjectEntry {
     if (-not $packagePath) {
         Write-Warning "Skipping $internalName because no packaged latest.zip was found."
         return $null
+    }
+
+    $packageManifest = Read-ZipManifest -ZipPath $packagePath -InternalName $internalName
+    if ($packageManifest) {
+        $manifest = $packageManifest
+        $version = [string]$packageManifest.AssemblyVersion
+    } else {
+        $version = Read-CsprojVersion -CsprojPath $csproj.FullName
     }
 
     $outputPluginDir = Join-Path $OutputRoot "plugins\$internalName"
