@@ -22,6 +22,8 @@ The script [tools/Build-DalamudRepo.ps1](D:\Dalamud.Updater\mod-source\tools\Bui
 - `plugin-repo/repo.json`
 - `plugin-repo/plugins/<InternalName>/latest.zip`
 
+It also respects [repo-config.json](D:\Dalamud.Updater\mod-source\repo-config.json), which can exclude selected plugins from your custom repo when needed.
+
 It currently supports:
 
 - source manifests in `json`
@@ -35,6 +37,24 @@ If a project does not have a packaged `latest.zip`, it is skipped on purpose so 
 
 - `ffxiv-characterstatus-refined` is already close to publishable because it has `release/CharacterPanelRefined/latest.zip`
 - `WrathCombo` has a valid plugin manifest, but there is no packaged `latest.zip` checked into this workspace right now, so it will be skipped until you generate or publish that package
+
+## Upstream Sync Strategy
+
+If a plugin is already maintained in a well-known upstream custom repo and you want to keep following that upstream for frequent updates, do not publish the exact same `InternalName` from your own custom repo unless you intentionally want to override it.
+
+In this workspace, `WrathCombo` follows a safer pattern:
+
+- source code stays synced from upstream in your fork
+- GitHub Actions builds a normal upstream-compatible package
+- the workflow also derives a separate `WrathComboCN` package for your custom repo
+
+That keeps upstream compatibility while avoiding Dalamud de-duplication conflicts with the upstream `WrathCombo`.
+
+Use your custom repo mainly for:
+
+- plugins that are not available in your existing upstream sources
+- your own forks when you intentionally want to diverge
+- CN/test/private variants that should coexist with upstream entries
 
 ## Generate the repo
 

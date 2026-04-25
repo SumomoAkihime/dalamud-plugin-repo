@@ -3,7 +3,8 @@ param(
     [string]$BaseUrl,
 
     [string]$SourceRoot = "",
-    [string]$OutputRoot = ""
+    [string]$OutputRoot = "",
+    [string]$ConfigPath = ""
 )
 
 Set-StrictMode -Version Latest
@@ -21,6 +22,10 @@ if ([string]::IsNullOrWhiteSpace($SourceRoot)) {
 
 if ([string]::IsNullOrWhiteSpace($OutputRoot)) {
     $OutputRoot = Join-Path $SourceRoot "plugin-repo"
+}
+
+if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
+    $ConfigPath = Join-Path $SourceRoot "repo-config.json"
 }
 
 function Normalize-BaseUrl {
@@ -51,6 +56,18 @@ function Read-JsonManifest {
     return Get-Content $Path -Raw | ConvertFrom-Json
 }
 
+function Read-RepoConfig {
+    param([string]$Path)
+
+    if (-not (Test-Path $Path)) {
+        return [pscustomobject]@{
+            excludedInternalNames = @()
+        }
+    }
+
+    return Get-Content $Path -Raw | ConvertFrom-Json
+}
+
 function Read-ZipManifest {
     param(
         [string]$ZipPath,
@@ -62,6 +79,16 @@ function Read-ZipManifest {
     try {
         $entryName = "$InternalName.json"
         $entry = $archive.Entries | Where-Object { $_.FullName -eq $entryName } | Select-Object -First 1
+        if (-not $entry) {
+            $entry = $archive.Entries |
+                Where-Object {
+                    $_.FullName -notmatch '/' -and
+                    $_.Name -like '*.json' -and
+                    $_.Name -notlike '*.deps.json'
+                } |
+                Select-Object -First 1
+        }
+
         if (-not $entry) {
             return $null
         }
@@ -206,6 +233,9 @@ function Get-ProjectEntry {
     $packageManifest = Read-ZipManifest -ZipPath $packagePath -InternalName $internalName
     if ($packageManifest) {
         $manifest = $packageManifest
+        if ($packageManifest.PSObject.Properties.Name -contains "InternalName" -and $packageManifest.InternalName) {
+            $internalName = [string]$packageManifest.InternalName
+        }
         $version = [string]$packageManifest.AssemblyVersion
     } else {
         $version = Read-CsprojVersion -CsprojPath $csproj.FullName
@@ -259,6 +289,9 @@ function Get-ProjectEntry {
 }
 
 $BaseUrl = Normalize-BaseUrl -Url $BaseUrl
+$repoConfig = Read-RepoConfig -Path $ConfigPath
+$excludedInternalNames = @($repoConfig.excludedInternalNames)
+
 New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $OutputRoot "plugins") -Force | Out-Null
 
@@ -269,6 +302,10 @@ $entries = @()
 foreach ($projectDir in $projectDirs) {
     $entry = Get-ProjectEntry -ProjectDir $projectDir -BaseUrl $BaseUrl -OutputRoot $OutputRoot
     if ($entry) {
+        if ($excludedInternalNames -contains $entry.InternalName) {
+            Write-Host "Excluded plugin: $($entry.InternalName)"
+            continue
+        }
         $entries += $entry
     }
 }

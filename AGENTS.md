@@ -38,3 +38,5 @@
 - When a custom repo or official repo manifest says one `AssemblyVersion` but the downloadable zip contains another, installs/updates may fail. Prefer reading the packaged plugin manifest from inside `latest.zip` when generating repository metadata.
 - New official submissions should go to testing first (`testing/live` in D17, `testing` in the legacy repo flow) before moving to stable.
 - Plugin icons should exist in `images/` and stay within the documented size range: minimum `64x64`, maximum `512x512`.
+- When a plugin is already distributed from an upstream custom repo that the user still keeps enabled, avoid re-publishing the same `InternalName` from this custom repo unless the goal is to override upstream deliberately. Dalamud may de-duplicate or prefer one source, which makes frequent upstream-sync workflows confusing.
+- For upstream-synced forks that still need a distinct listing in the custom repo, prefer a derived variant package with a different `InternalName` instead of overriding the upstream one. In this workspace, `WrathCombo` is published to the custom repo as `WrathComboCN` / `Wrath Combo CN`.

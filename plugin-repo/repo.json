@@ -33,12 +33,12 @@
     },
     {
         "Author":  "Team Wrath",
-        "Name":  "Wrath Combo",
-        "InternalName":  "WrathCombo",
+        "Name":  "Wrath Combo CN",
+        "InternalName":  "WrathComboCN",
         "AssemblyVersion":  "1.0.3.26",
-        "Description":  "XIVCombo for very lazy players",
+        "Description":  "CN variant of Wrath Combo, packaged from the synced upstream source.",
         "ApplicableVersion":  "any",
-        "RepoUrl":  "https://github.com/PunishXIV/WrathCombo",
+        "RepoUrl":  "https://github.com/SumomoAkihime/WrathCombo",
         "Tags":  [
                      "combo",
                      "wrath",
@@ -54,11 +54,11 @@
         "LoadSync":  false,
         "CanUnloadAsync":  false,
         "LoadPriority":  0,
-        "Punchline":  "Condenses combos and mutually exclusive abilities onto a single button - and then some.",
+        "Punchline":  "Wrath Combo CN build from synced upstream source.",
         "Changelog":  "Please check the project\u0027s GitHub or Discord for a full changelog.",
-        "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathCombo/latest.zip",
-        "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathCombo/latest.zip",
-        "LastUpdate":  1777060154,
+        "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
+        "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
+        "LastUpdate":  1777061212,
         "IconUrl":  "https://s3.puni.sh/media/plugin/60/icon-2bwhkn3zf1f.png",
         "AcceptsFeedback":  true
     }
