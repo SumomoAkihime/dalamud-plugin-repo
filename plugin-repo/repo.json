@@ -1,34 +1,65 @@
 ﻿[
-{
-    "Author":  "Kouzukii",
-    "Name":  "Character Panel Refined",
-    "InternalName":  "CharacterPanelRefined",
-    "AssemblyVersion":  "1.8.5.0",
-    "Description":  "Character Panel Refined cuts away useless information from the character panel, while adding useful stats like critical hit and direct hit percentages as well as estimates damage output to allow for easier comparison of gear.",
-    "ApplicableVersion":  "any",
-    "RepoUrl":  "https://github.com/Kouzukii/ffxiv-characterstatus-refined",
-    "Tags":  [
-                 "character",
-                 "stats"
-             ],
-    "DalamudApiLevel":  14,
-    "LoadRequiredState":  0,
-    "LoadSync":  false,
-    "CanUnloadAsync":  false,
-    "LoadPriority":  0,
-    "Punchline":  "Refine the character panel to display only useful information like crit and direct hit chance",
-    "Changelog":  "",
-    "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-    "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-    "LastUpdate":  1775657967,
-    "CategoryTags":  [
-                         "ui"
-                     ],
-    "ImageUrls":  [
-                      "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/image1.png",
-                      "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/image2.png"
-                  ],
-    "IconUrl":  "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/icon.png",
-    "AcceptsFeedback":  true
-}
+    {
+        "Author":  "Kouzukii",
+        "Name":  "Character Panel Refined",
+        "InternalName":  "CharacterPanelRefined",
+        "AssemblyVersion":  "1.8.5.0",
+        "Description":  "Character Panel Refined cuts away useless information from the character panel, while adding useful stats like critical hit and direct hit percentages as well as estimates damage output to allow for easier comparison of gear.",
+        "ApplicableVersion":  "any",
+        "RepoUrl":  "https://github.com/Kouzukii/ffxiv-characterstatus-refined",
+        "Tags":  [
+                     "character",
+                     "stats"
+                 ],
+        "DalamudApiLevel":  14,
+        "LoadRequiredState":  0,
+        "LoadSync":  false,
+        "CanUnloadAsync":  false,
+        "LoadPriority":  0,
+        "Punchline":  "Refine the character panel to display only useful information like crit and direct hit chance",
+        "Changelog":  "",
+        "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
+        "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
+        "LastUpdate":  1775657967,
+        "CategoryTags":  [
+                             "ui"
+                         ],
+        "ImageUrls":  [
+                          "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/image1.png",
+                          "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/image2.png"
+                      ],
+        "IconUrl":  "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/icon.png",
+        "AcceptsFeedback":  true
+    },
+    {
+        "Author":  "Team Wrath",
+        "Name":  "Wrath Combo",
+        "InternalName":  "WrathCombo",
+        "AssemblyVersion":  "1.0.3.26",
+        "Description":  "XIVCombo for very lazy players",
+        "ApplicableVersion":  "any",
+        "RepoUrl":  "https://github.com/PunishXIV/WrathCombo",
+        "Tags":  [
+                     "combo",
+                     "wrath",
+                     "wrathcombo",
+                     "auto",
+                     "autorotation",
+                     "rotation",
+                     "pve",
+                     "pvp"
+                 ],
+        "DalamudApiLevel":  14,
+        "LoadRequiredState":  0,
+        "LoadSync":  false,
+        "CanUnloadAsync":  false,
+        "LoadPriority":  0,
+        "Punchline":  "Condenses combos and mutually exclusive abilities onto a single button - and then some.",
+        "Changelog":  "Please check the project\u0027s GitHub or Discord for a full changelog.",
+        "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathCombo/latest.zip",
+        "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathCombo/latest.zip",
+        "LastUpdate":  1777060154,
+        "IconUrl":  "https://s3.puni.sh/media/plugin/60/icon-2bwhkn3zf1f.png",
+        "AcceptsFeedback":  true
+    }
 ]
