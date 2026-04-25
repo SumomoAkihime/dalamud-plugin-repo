@@ -3,7 +3,7 @@
     "Author":  "Team Wrath",
     "Name":  "Wrath Combo CN",
     "InternalName":  "WrathComboCN",
-    "AssemblyVersion":  "1.0.3.2601",
+    "AssemblyVersion":  "1.0.3.26006",
     "Description":  "CN variant of Wrath Combo, packaged from the synced upstream source.",
     "ApplicableVersion":  "any",
     "RepoUrl":  "https://github.com/SumomoAkihime/WrathCombo",
@@ -26,7 +26,7 @@
     "Changelog":  "Please check the project\u0027s GitHub or Discord for a full changelog.",
     "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
     "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
-    "LastUpdate":  1777092806,
+    "LastUpdate":  1777103516,
     "IconUrl":  "https://s3.puni.sh/media/plugin/60/icon-2bwhkn3zf1f.png",
     "AcceptsFeedback":  true
 }
