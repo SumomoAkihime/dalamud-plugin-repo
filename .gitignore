@@ -1,0 +1,13 @@
+.git/
+
+# Child source repositories stay independent.
+/ffxiv-characterstatus-refined/
+/WrathCombo/
+
+# PowerShell / editor noise
+*.user
+*.suo
+.vs/
+
+# Optional local test output
+/plugin-repo-test/
