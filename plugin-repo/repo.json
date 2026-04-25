@@ -18,8 +18,8 @@
     "LoadPriority":  0,
     "Punchline":  "Refine the character panel to display only useful information like crit and direct hit chance",
     "Changelog":  "",
-    "DownloadLinkInstall":  "https://example.com/dalamud/plugins/CharacterPanelRefined/latest.zip",
-    "DownloadLinkUpdate":  "https://example.com/dalamud/plugins/CharacterPanelRefined/latest.zip",
+    "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
+    "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
     "LastUpdate":  1775657967,
     "CategoryTags":  [
                          "ui"
