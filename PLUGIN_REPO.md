@@ -79,6 +79,20 @@ https://raw.githubusercontent.com/<your-user>/<your-repo>/<your-branch>/plugin-r
 3. Commit the generated `plugin-repo` folder to the hosting repository.
 4. Add the final `repo.json` URL in Dalamud custom repositories.
 
+## Automated sync
+
+This repository now also contains [sync-plugin-repo.yml](D:\Dalamud.Updater\mod-source\.github\workflows\sync-plugin-repo.yml).
+
+It rebuilds the hosted `plugin-repo` automatically by:
+
+- cloning `SumomoAkihime/ffxiv-characterstatus-refined`
+- cloning `SumomoAkihime/WrathCombo`
+- downloading the latest successful `WrathComboCN-package` artifact from the `WrathCombo` workflow
+- regenerating `plugin-repo/repo.json`
+- committing updated package files back to this repository
+
+This keeps the custom repo aligned with upstream-synced source forks while still publishing the distinct `CN` variant.
+
 ## Important update rule
 
 For Dalamud to detect updates reliably:

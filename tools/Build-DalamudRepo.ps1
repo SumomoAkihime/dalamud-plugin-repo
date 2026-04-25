@@ -293,7 +293,11 @@ $repoConfig = Read-RepoConfig -Path $ConfigPath
 $excludedInternalNames = @($repoConfig.excludedInternalNames)
 
 New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
-New-Item -ItemType Directory -Path (Join-Path $OutputRoot "plugins") -Force | Out-Null
+$pluginsOutputRoot = Join-Path $OutputRoot "plugins"
+if (Test-Path $pluginsOutputRoot) {
+    Remove-Item $pluginsOutputRoot -Recurse -Force
+}
+New-Item -ItemType Directory -Path $pluginsOutputRoot -Force | Out-Null
 
 $projectDirs = Get-ChildItem $SourceRoot -Directory |
     Where-Object { $_.Name -notin @("plugin-repo", "tools", ".git") }

@@ -1,0 +1,94 @@
+name: Sync Dalamud Plugin Repo
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+  push:
+    branches:
+      - master
+    paths:
+      - '.github/workflows/sync-plugin-repo.yml'
+      - 'tools/Build-DalamudRepo.ps1'
+      - 'repo-config.json'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  sync:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Clone source repositories
+        shell: pwsh
+        run: |
+          $sourcesRoot = Join-Path $env:GITHUB_WORKSPACE '_sources'
+          if (Test-Path $sourcesRoot) { Remove-Item $sourcesRoot -Recurse -Force }
+          New-Item -ItemType Directory -Path $sourcesRoot -Force | Out-Null
+
+          git clone --depth 1 https://github.com/SumomoAkihime/ffxiv-characterstatus-refined.git (Join-Path $sourcesRoot 'ffxiv-characterstatus-refined')
+          git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/WrathCombo.git (Join-Path $sourcesRoot 'WrathCombo')
+
+      - name: Download latest WrathCombo CN artifact
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $headers = @{
+            Authorization = "Bearer $env:GH_TOKEN"
+            Accept = 'application/vnd.github+json'
+            'User-Agent' = 'GitHub Actions'
+          }
+
+          $runs = Invoke-RestMethod -Uri 'https://api.github.com/repos/SumomoAkihime/WrathCombo/actions/workflows/publish-plugin.yml/runs?status=success&per_page=5' -Headers $headers
+          $run = $runs.workflow_runs | Select-Object -First 1
+          if (-not $run) { throw 'No successful WrathCombo packaging workflow run found.' }
+
+          $artifacts = Invoke-RestMethod -Uri $run.artifacts_url -Headers $headers
+          $artifact = $artifacts.artifacts | Where-Object { $_.name -eq 'WrathComboCN-package' } | Select-Object -First 1
+          if (-not $artifact) { throw 'WrathComboCN-package artifact not found.' }
+
+          $downloadZip = Join-Path $env:RUNNER_TEMP 'WrathComboCN-artifact.zip'
+          Invoke-WebRequest -Uri $artifact.archive_download_url -Headers $headers -OutFile $downloadZip
+
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $artifactExtract = Join-Path $env:RUNNER_TEMP 'WrathComboCN-artifact'
+          if (Test-Path $artifactExtract) { Remove-Item $artifactExtract -Recurse -Force }
+          [System.IO.Compression.ZipFile]::ExtractToDirectory($downloadZip, $artifactExtract)
+
+          $cnZip = Join-Path $artifactExtract 'WrathComboCN-latest.zip'
+          if (-not (Test-Path $cnZip)) { throw 'WrathComboCN-latest.zip not found in artifact.' }
+
+          $releaseDir = Join-Path $env:GITHUB_WORKSPACE '_sources\WrathCombo\release\WrathCombo'
+          New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
+          Copy-Item $cnZip (Join-Path $releaseDir 'latest.zip') -Force
+
+      - name: Build aggregated repo
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File .\tools\Build-DalamudRepo.ps1 `
+            -BaseUrl "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo" `
+            -SourceRoot (Join-Path $env:GITHUB_WORKSPACE '_sources') `
+            -OutputRoot (Join-Path $env:GITHUB_WORKSPACE 'plugin-repo') `
+            -ConfigPath (Join-Path $env:GITHUB_WORKSPACE 'repo-config.json')
+
+      - name: Commit updated repo contents
+        shell: pwsh
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git add plugin-repo
+
+          if (git diff --cached --quiet) {
+            Write-Host 'No plugin repo changes detected.'
+            exit 0
+          }
+
+          git commit -m "自动同步插件源"
+          git push
