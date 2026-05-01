@@ -8,6 +8,7 @@
 - `ffxiv-characterstatus-refined` already includes packaged release output (`release/CharacterPanelRefined/latest.zip`), but `WrathCombo` does not currently include equivalent plugin release artifacts or a plugin publish workflow in-repo. Do not assume every plugin here is ready to be listed in a live custom repo without an extra packaging step.
 - After rebasing `WrathCombo` to newer upstream commits, `SMN_Helper.cs` can fail with `CS0104` because `AetherFlags` exists in both `Dalamud.Game.ClientState.JobGauge.Enums` and `FFXIVClientStructs.FFXIV.Client.Game.Gauge`. Prefer fully-qualified enum casts in that file to keep CI packaging green.
 - `WrathCombo` upstream source repo version metadata may lag behind live published version (e.g., `.csproj` at `1.0.4.0` while `https://love.puni.sh/ment.json` publishes `1.0.4.1`). For CN variant versioning based on upstream release numbers, prefer the source repo index (`ment.json`) as version base instead of the packaged manifest alone.
+- Avoid 5-part CN AssemblyVersion strings like `1.0.4.1.n`; Dalamud/.NET version comparison is safer with exactly 4 parts. Use derived 4-part form `a.b.c.(d*1000+n)` (for example upstream `1.0.4.1` + CN `12` -> `1.0.4.1012`).
 
 ## Dalamud Dev Environment
 
