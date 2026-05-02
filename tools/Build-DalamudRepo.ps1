@@ -248,6 +248,15 @@ function Get-ProjectEntry {
     $downloadUrl = "{0}/plugins/{1}/latest.zip" -f $BaseUrl, $internalName
     $lastUpdate = ConvertTo-UnixTimestamp -Date (Get-Item $packagePath).LastWriteTimeUtc
 
+    $tags = @()
+    if ($manifest.PSObject.Properties.Name -contains "Tags" -and $null -ne $manifest.Tags) {
+        if ($manifest.Tags -is [string]) {
+            $tags = @([string]$manifest.Tags)
+        } elseif ($manifest.Tags -is [System.Collections.IEnumerable] -and -not ($manifest.Tags -is [pscustomobject])) {
+            $tags = @($manifest.Tags)
+        }
+    }
+
     $entry = [ordered]@{
         Author = [string]$manifest.Author
         Name = [string]$manifest.Name
@@ -256,7 +265,7 @@ function Get-ProjectEntry {
         Description = [string]$manifest.Description
         ApplicableVersion = if ($manifest.PSObject.Properties.Name -contains "ApplicableVersion" -and $manifest.ApplicableVersion) { [string]$manifest.ApplicableVersion } else { "any" }
         RepoUrl = [string]$manifest.RepoUrl
-        Tags = @($manifest.Tags)
+        Tags = $tags
         DalamudApiLevel = [int]$manifest.DalamudApiLevel
         LoadRequiredState = if ($manifest.PSObject.Properties.Name -contains "LoadRequiredState") { [int]$manifest.LoadRequiredState } else { 0 }
         LoadSync = if ($manifest.PSObject.Properties.Name -contains "LoadSync") { [bool]$manifest.LoadSync } else { $false }
