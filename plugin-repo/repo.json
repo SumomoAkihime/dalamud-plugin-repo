@@ -20,7 +20,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-        "LastUpdate":  1777729838,
+        "LastUpdate":  1777733890,
         "CategoryTags":  [
                              "ui"
                          ],
@@ -29,35 +29,6 @@
                           "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/image2.png"
                       ],
         "IconUrl":  "https://raw.githubusercontent.com/Kouzukii/ffxiv-characterstatus-refined/master/images/icon.png",
-        "AcceptsFeedback":  true
-    },
-    {
-        "Author":  "veyn",
-        "Name":  "Boss Mod",
-        "InternalName":  "BossMod",
-        "AssemblyVersion":  "7.5.0.1",
-        "Description":  "A bunch of utilities to simplify bosses.",
-        "ApplicableVersion":  "any",
-        "RepoUrl":  "https://github.com/awgil/ffxiv_bossmod",
-        "Tags":  [
-
-                 ],
-        "DalamudApiLevel":  15,
-        "LoadRequiredState":  0,
-        "LoadSync":  false,
-        "CanUnloadAsync":  false,
-        "LoadPriority":  0,
-        "Punchline":  "Don\u0027t fail at raid mechanics anymore",
-        "Changelog":  "",
-        "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1777733504,
-        "ImageUrls":  [
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image3.png"
-                      ],
-        "IconUrl":  "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/f4efcb5dc279d21ee16185d5a9f2d09a3a2bc58b/Data/icon.png",
         "AcceptsFeedback":  true
     },
     {
