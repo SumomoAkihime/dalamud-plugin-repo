@@ -11,6 +11,7 @@
 - Avoid 5-part CN AssemblyVersion strings like `1.0.4.1.n`; Dalamud/.NET version comparison is safer with exactly 4 parts. Use derived 4-part form `a.b.c.(d*1000+n)` (for example upstream `1.0.4.1` + CN `12` -> `1.0.4.1012`).
 - In this workspace, invoking `rg.exe` can fail with `Access is denied` even when PowerShell commands work normally. If fast file search unexpectedly fails, fall back to `Get-ChildItem` + `Select-String` instead of assuming missing files.
 - `ffxiv_bossmod` hardcoded `Service.LuminaSheet<T>()` to `Lumina.Data.Language.English`; on CN/other non-English environments this can return null sheets and crash plugin init (e.g. `ActionDefinitions.RegisterSpell` NRE during startup). Prefer English-first with fallback to default/client language sheet.
+- The root `sync-plugin-repo.yml` workflow fully regenerates `plugin-repo/repo.json` from repositories cloned into `_sources`. If a plugin source repo is not cloned there (or has no built `latest.zip`), that plugin will disappear from the published custom repo on the next sync even if it was manually committed before.
 
 ## Dalamud Dev Environment
 
