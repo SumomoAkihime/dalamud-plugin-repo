@@ -35,7 +35,7 @@
         "Author":  "veyn",
         "Name":  "Boss Mod",
         "InternalName":  "BossMod",
-        "AssemblyVersion":  "7.5.0.1",
+        "AssemblyVersion":  "7.5.0.2",
         "Description":  "A bunch of utilities to simplify bosses.",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/awgil/ffxiv_bossmod",
@@ -51,7 +51,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1777749690,
+        "LastUpdate":  1777773743,
         "ImageUrls":  [
                           "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
                           "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
