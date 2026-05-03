@@ -17,6 +17,9 @@
 - `BossmodReborn` Dawntrail module code currently targets a newer BossMod framework API surface than this fork (for example changed `GenericAOEs.ActiveAOEs` signatures, missing component classes, and enum/category members). Do not bulk-copy Reborn `Modules` into this fork unless framework/API compatibility is aligned first; otherwise compilation fails with hundreds of errors.
 - Even when narrowing to seemingly isolated `Dawntrail/Alliance` trash modules (for example `A10Trash`, `A20Trash`), there are still broad helper/API mismatches (`PolygonCustom`, arena helpers, state helper methods, additional component abstractions). Treat these as framework-port tasks, not data-only merges.
 - In this fork's geometry API, `RelPolygonWithHoles` / `AddHole` expect concrete `List<WDir>` inputs; passing `CurveApprox.*` enumerables directly can fail to compile. Convert with `.ToList()` when constructing custom AOE polygons.
+- `tools/Build-DalamudRepo.ps1` now requires explicit `-BaseUrl`; running it without that mandatory parameter fails immediately. Reuse the workflow value: `https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo`.
+- Reborn merge conflict resolution can occasionally leave C# files with embedded NUL (`0x00`) bytes (seen in `M07SBruteAbombinatorConfig.cs`), causing garbled display and unreliable diffs. If syntax suddenly looks blank/corrupt, inspect raw bytes and rewrite the file as clean UTF-8 text before building.
+- In this workspace, pushing `ffxiv_bossmod` can succeed on GitHub while local tracking ref update fails with `update_ref failed ... refs/remotes/origin/master ... reference broken`. Treat this as local ref corruption (not remote push failure) and verify by checking remote commit presence, then refresh local remote refs as needed.
 
 ## Dalamud Dev Environment
 
