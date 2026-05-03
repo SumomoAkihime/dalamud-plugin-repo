@@ -16,6 +16,7 @@
 - `ffxiv_bossmod/BossMod/BossMod.json` can become invalid JSON after encoding-corrupted manual edits (mojibake + missing quote in `Description`). If `Build-DalamudRepo.ps1` fails at `ConvertFrom-Json`, validate this manifest first before troubleshooting build scripts.
 - `BossmodReborn` Dawntrail module code currently targets a newer BossMod framework API surface than this fork (for example changed `GenericAOEs.ActiveAOEs` signatures, missing component classes, and enum/category members). Do not bulk-copy Reborn `Modules` into this fork unless framework/API compatibility is aligned first; otherwise compilation fails with hundreds of errors.
 - Even when narrowing to seemingly isolated `Dawntrail/Alliance` trash modules (for example `A10Trash`, `A20Trash`), there are still broad helper/API mismatches (`PolygonCustom`, arena helpers, state helper methods, additional component abstractions). Treat these as framework-port tasks, not data-only merges.
+- In this fork's geometry API, `RelPolygonWithHoles` / `AddHole` expect concrete `List<WDir>` inputs; passing `CurveApprox.*` enumerables directly can fail to compile. Convert with `.ToList()` when constructing custom AOE polygons.
 
 ## Dalamud Dev Environment
 
