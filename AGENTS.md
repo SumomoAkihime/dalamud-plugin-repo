@@ -60,3 +60,5 @@
 - When searching version strings with PowerShell Get-ChildItem -Recurse | Select-String, unfiltered scans can hit in/ binaries and dump huge garbled output; restrict to source files (for example *.csproj, *.json, *.cs) to avoid misleading noise and terminal slowdowns.
 - Root repo now includes .githooks/pre-push to block accidental multi-plugin payload pushes; this guardrail only works after setting core.hooksPath=.githooks (run 	ools/Enable-RepoIsolation.ps1 once per clone).
 - Do not run Copy-Item ... latest.zip and 	ools/Build-DalamudRepo.ps1 in parallel: Build-DalamudRepo.ps1 can fail with file-lock IO exception on fxiv_bossmod/release/BossMod/latest.zip. Run these steps sequentially.
+- In this fork, BossComponent.KeepOnPhaseChange is a mutable field (set in constructor), not an overridable property; Reborn-style override bool KeepOnPhaseChange will not compile. Also ArenaBoundsCustom has no Center property here, so arena center must be set explicitly (for Ex3 use 
+ew(100, 100)).
