@@ -20,7 +20,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-        "LastUpdate":  1775657967,
+        "LastUpdate":  1777781605,
         "CategoryTags":  [
                              "ui"
                          ],
@@ -51,7 +51,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1777777473,
+        "LastUpdate":  1777781783,
         "ImageUrls":  [
                           "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
                           "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
@@ -64,7 +64,7 @@
         "Author":  "Team Wrath",
         "Name":  "Wrath Combo CN",
         "InternalName":  "WrathComboCN",
-        "AssemblyVersion":  "1.0.3.26",
+        "AssemblyVersion":  "1.0.4.1012",
         "Description":  "CN variant of Wrath Combo, packaged from the synced upstream source.",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/SumomoAkihime/WrathCombo",
@@ -78,7 +78,7 @@
                      "pve",
                      "pvp"
                  ],
-        "DalamudApiLevel":  14,
+        "DalamudApiLevel":  15,
         "LoadRequiredState":  0,
         "LoadSync":  false,
         "CanUnloadAsync":  false,
@@ -87,7 +87,7 @@
         "Changelog":  "Please check the project\u0027s GitHub or Discord for a full changelog.",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/WrathComboCN/latest.zip",
-        "LastUpdate":  1777061212,
+        "LastUpdate":  1777651284,
         "IconUrl":  "https://s3.puni.sh/media/plugin/60/icon-2bwhkn3zf1f.png",
         "AcceptsFeedback":  true
     }
