@@ -12,6 +12,8 @@
 - In this workspace, invoking `rg.exe` can fail with `Access is denied` even when PowerShell commands work normally. If fast file search unexpectedly fails, fall back to `Get-ChildItem` + `Select-String` instead of assuming missing files.
 - `ffxiv_bossmod` hardcoded `Service.LuminaSheet<T>()` to `Lumina.Data.Language.English`; on CN/other non-English environments this can return null sheets and crash plugin init (e.g. `ActionDefinitions.RegisterSpell` NRE during startup). Prefer English-first with fallback to default/client language sheet.
 - The root `sync-plugin-repo.yml` workflow fully regenerates `plugin-repo/repo.json` from repositories cloned into `_sources`. If a plugin source repo is not cloned there (or has no built `latest.zip`), that plugin will disappear from the published custom repo on the next sync even if it was manually committed before.
+- During cross-repo module merge, some Dawntrail filenames can appear with mojibake in terminal output (for example `Tr?umerei` instead of `Träumerei`) due to console encoding. Use `-LiteralPath` and avoid renaming based on garbled output; verify real file names directly in filesystem before patching.
+- `ffxiv_bossmod/BossMod/BossMod.json` can become invalid JSON after encoding-corrupted manual edits (mojibake + missing quote in `Description`). If `Build-DalamudRepo.ps1` fails at `ConvertFrom-Json`, validate this manifest first before troubleshooting build scripts.
 
 ## Dalamud Dev Environment
 
