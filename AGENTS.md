@@ -20,6 +20,7 @@
 - `tools/Build-DalamudRepo.ps1` now requires explicit `-BaseUrl`; running it without that mandatory parameter fails immediately. Reuse the workflow value: `https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo`.
 - Reborn merge conflict resolution can occasionally leave C# files with embedded NUL (`0x00`) bytes (seen in `M07SBruteAbombinatorConfig.cs`), causing garbled display and unreliable diffs. If syntax suddenly looks blank/corrupt, inspect raw bytes and rewrite the file as clean UTF-8 text before building.
 - In this workspace, pushing `ffxiv_bossmod` can succeed on GitHub while local tracking ref update fails with `update_ref failed ... refs/remotes/origin/master ... reference broken`. Treat this as local ref corruption (not remote push failure) and verify by checking remote commit presence, then refresh local remote refs as needed.
+- `ffxiv_bossmod/EX_MISSING_AFTER_PHASE4.txt` can over-report missing files because several mechanics were already implemented under different filenames/classes in this fork. Before porting from Reborn, normalize the list by checking both file existence and equivalent class/mechanic coverage; otherwise you may attempt duplicate ports and hit unnecessary compile conflicts.
 
 ## Dalamud Dev Environment
 
