@@ -14,6 +14,7 @@
 - The root `sync-plugin-repo.yml` workflow fully regenerates `plugin-repo/repo.json` from repositories cloned into `_sources`. If a plugin source repo is not cloned there (or has no built `latest.zip`), that plugin will disappear from the published custom repo on the next sync even if it was manually committed before.
 - During cross-repo module merge, some Dawntrail filenames can appear with mojibake in terminal output (for example `Tr?umerei` instead of `Träumerei`) due to console encoding. Use `-LiteralPath` and avoid renaming based on garbled output; verify real file names directly in filesystem before patching.
 - `ffxiv_bossmod/BossMod/BossMod.json` can become invalid JSON after encoding-corrupted manual edits (mojibake + missing quote in `Description`). If `Build-DalamudRepo.ps1` fails at `ConvertFrom-Json`, validate this manifest first before troubleshooting build scripts.
+- `BossmodReborn` Dawntrail module code currently targets a newer BossMod framework API surface than this fork (for example changed `GenericAOEs.ActiveAOEs` signatures, missing component classes, and enum/category members). Do not bulk-copy Reborn `Modules` into this fork unless framework/API compatibility is aligned first; otherwise compilation fails with hundreds of errors.
 
 ## Dalamud Dev Environment
 
