@@ -62,3 +62,4 @@
 - Do not run Copy-Item ... latest.zip and 	ools/Build-DalamudRepo.ps1 in parallel: Build-DalamudRepo.ps1 can fail with file-lock IO exception on fxiv_bossmod/release/BossMod/latest.zip. Run these steps sequentially.
 - In this fork, BossComponent.KeepOnPhaseChange is a mutable field (set in constructor), not an overridable property; Reborn-style override bool KeepOnPhaseChange will not compile. Also ArenaBoundsCustom has no Center property here, so arena center must be set explicitly (for Ex3 use 
 ew(100, 100)).
+- If fxiv_bossmod push/fetch reports update_ref failed ... refs/remotes/origin/master ... reference broken, check .git/refs/remotes/origin/master first. In one failure case it contained only NUL bytes (corrupted loose ref) while packed-refs still had an old hash. Minimal fix: delete the corrupted loose ref file, then run git fetch origin --prune to recreate a valid tracking ref.
