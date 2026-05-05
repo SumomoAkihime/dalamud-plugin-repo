@@ -64,3 +64,4 @@
 ew(100, 100)).
 - If fxiv_bossmod push/fetch reports update_ref failed ... refs/remotes/origin/master ... reference broken, check .git/refs/remotes/origin/master first. In one failure case it contained only NUL bytes (corrupted loose ref) while packed-refs still had an old hash. Minimal fix: delete the corrupted loose ref file, then run git fetch origin --prune to recreate a valid tracking ref.
 - If epo.json unexpectedly stays on the previous BossMod version after a successful build, verify that fxiv_bossmod/release/BossMod/latest.zip was copied before running Build-DalamudRepo.ps1; running copy and build steps in parallel can race and leave stale metadata.
+- In this terminal environment, git rebase --continue can block waiting for an interactive editor and hit command timeout; use non-interactive continuation ($env:GIT_EDITOR='true'; git rebase --continue) to finish safely.
