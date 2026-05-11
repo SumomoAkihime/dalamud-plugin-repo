@@ -20,7 +20,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-        "LastUpdate":  1778495469,
+        "LastUpdate":  1778424496,
         "CategoryTags":  [
                              "ui"
                          ],
@@ -38,7 +38,7 @@
         "AssemblyVersion":  "7.5.0.360",
         "Description":  "Integrated Boss encounter toolkit with radar, mechanic hints, and combat assistance.",
         "ApplicableVersion":  "any",
-        "RepoUrl":  "https://github.com/awgil/ffxiv_bossmod",
+        "RepoUrl":  "https://github.com/SumomoAkihime/ffxiv_bossmod",
         "Tags":  [
 
                  ],
@@ -51,13 +51,13 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1778496534,
+        "LastUpdate":  1778508148,
         "ImageUrls":  [
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image1.png",
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image2.png",
-                          "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/master/Data/image3.png"
+                          "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image1.png",
+                          "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image2.png",
+                          "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image3.png"
                       ],
-        "IconUrl":  "https://raw.githubusercontent.com/awgil/ffxiv_bossmod/f4efcb5dc279d21ee16185d5a9f2d09a3a2bc58b/Data/icon.png",
+        "IconUrl":  "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/icon.png",
         "AcceptsFeedback":  true
     },
     {
