@@ -33,6 +33,7 @@ jobs:
 
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv-characterstatus-refined.git (Join-Path $sourcesRoot 'ffxiv-characterstatus-refined')
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
+          git clone --depth 1 https://github.com/SumomoAkihime/ReMakePalce.git (Join-Path $sourcesRoot 'ReMakePalce')
           git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/WrathCombo.git (Join-Path $sourcesRoot 'WrathCombo')
 
       - name: Set up .NET 10
@@ -53,6 +54,19 @@ jobs:
         run: |
           Push-Location (Join-Path $env:GITHUB_WORKSPACE '_sources\ffxiv_bossmod')
           dotnet build .\BossMod\BossMod.csproj -c Release
+          Pop-Location
+
+      - name: Build ReMakePlace package
+        shell: pwsh
+        run: |
+          $repoRoot = Join-Path $env:GITHUB_WORKSPACE '_sources\ReMakePalce'
+          Push-Location $repoRoot
+          dotnet build .\ReMakePlacePlugin.sln -c Release
+          $srcZip = Join-Path $repoRoot 'bin\ReMakePlacePlugin\latest.zip'
+          if (-not (Test-Path $srcZip)) { throw 'ReMakePlace latest.zip not found after build.' }
+          $dstDir = Join-Path $repoRoot 'release\ReMakePlacePlugin'
+          New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
+          Copy-Item $srcZip (Join-Path $dstDir 'latest.zip') -Force
           Pop-Location
 
       - name: Download latest WrathCombo CN artifact
