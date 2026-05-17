@@ -35,7 +35,7 @@
         "Author":  "veyn",
         "Name":  "Boss Mod",
         "InternalName":  "BossMod",
-        "AssemblyVersion":  "7.5.0.704",
+        "AssemblyVersion":  "7.5.0.1101",
         "Description":  "Integrated Boss encounter toolkit with radar, mechanic hints, and combat assistance.",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/SumomoAkihime/ffxiv_bossmod",
