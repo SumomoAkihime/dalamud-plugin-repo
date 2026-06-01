@@ -20,7 +20,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-        "LastUpdate":  1780256552,
+        "LastUpdate":  1780291081,
         "CategoryTags":  [
                              "ui"
                          ],
@@ -51,7 +51,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1780256556,
+        "LastUpdate":  1780291085,
         "ImageUrls":  [
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image1.png",
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image2.png",
@@ -84,7 +84,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ReMakePlacePlugin/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ReMakePlacePlugin/latest.zip",
-        "LastUpdate":  1780256748,
+        "LastUpdate":  1780291287,
         "IconUrl":  "https://raw.githubusercontent.com/ReMakePlace/Plugin/master/icon.png",
         "AcceptsFeedback":  true
     },
