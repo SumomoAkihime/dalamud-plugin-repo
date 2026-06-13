@@ -34,6 +34,7 @@ jobs:
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv-characterstatus-refined.git (Join-Path $sourcesRoot 'ffxiv-characterstatus-refined')
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
           git clone --depth 1 https://github.com/SumomoAkihime/ReMakePalce.git (Join-Path $sourcesRoot 'ReMakePalce')
+          git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/Ices-Cosmic-Exploration.git (Join-Path $sourcesRoot 'Ices-Cosmic-Exploration')
           git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/WrathCombo.git (Join-Path $sourcesRoot 'WrathCombo')
 
       - name: Set up .NET 10
@@ -65,6 +66,19 @@ jobs:
           $srcZip = Join-Path $repoRoot 'bin\ReMakePlacePlugin\latest.zip'
           if (-not (Test-Path $srcZip)) { throw 'ReMakePlace latest.zip not found after build.' }
           $dstDir = Join-Path $repoRoot 'release\ReMakePlacePlugin'
+          New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
+          Copy-Item $srcZip (Join-Path $dstDir 'latest.zip') -Force
+          Pop-Location
+
+      - name: Build ICE package
+        shell: pwsh
+        run: |
+          $repoRoot = Join-Path $env:GITHUB_WORKSPACE '_sources\Ices-Cosmic-Exploration'
+          Push-Location $repoRoot
+          dotnet build .\ICE\ICE.csproj -c Release
+          $srcZip = Join-Path $repoRoot 'ICE\bin\Release\ICE\latest.zip'
+          if (-not (Test-Path $srcZip)) { throw 'ICE latest.zip not found after build.' }
+          $dstDir = Join-Path $repoRoot 'release\ICE'
           New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
           Copy-Item $srcZip (Join-Path $dstDir 'latest.zip') -Force
           Pop-Location
