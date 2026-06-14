@@ -76,9 +76,9 @@ jobs:
           $repoRoot = Join-Path $env:GITHUB_WORKSPACE '_sources\Ices-Cosmic-Exploration'
           Push-Location $repoRoot
           dotnet build .\ICE\ICE.csproj -c Release
-          $srcZip = Join-Path $repoRoot 'ICE\bin\Release\ICE\latest.zip'
+          $srcZip = Join-Path $repoRoot 'ICE\bin\Release\ICECN\latest.zip'
           if (-not (Test-Path $srcZip)) { throw 'ICE latest.zip not found after build.' }
-          $dstDir = Join-Path $repoRoot 'release\ICE'
+          $dstDir = Join-Path $repoRoot 'release\ICECN'
           New-Item -ItemType Directory -Path $dstDir -Force | Out-Null
           Copy-Item $srcZip (Join-Path $dstDir 'latest.zip') -Force
           Pop-Location
