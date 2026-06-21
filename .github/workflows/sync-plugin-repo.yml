@@ -35,7 +35,6 @@ jobs:
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
           git clone --depth 1 https://github.com/SumomoAkihime/ReMakePalce.git (Join-Path $sourcesRoot 'ReMakePalce')
           git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/Ices-Cosmic-Exploration.git (Join-Path $sourcesRoot 'Ices-Cosmic-Exploration')
-          git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/WrathCombo.git (Join-Path $sourcesRoot 'WrathCombo')
 
       - name: Set up .NET 10
         uses: actions/setup-dotnet@v4
@@ -83,40 +82,6 @@ jobs:
           Copy-Item $srcZip (Join-Path $dstDir 'latest.zip') -Force
           Pop-Location
 
-      - name: Download latest WrathCombo CN artifact
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          $headers = @{
-            Authorization = "Bearer $env:GH_TOKEN"
-            Accept = 'application/vnd.github+json'
-            'User-Agent' = 'GitHub Actions'
-          }
-
-          $runs = Invoke-RestMethod -Uri 'https://api.github.com/repos/SumomoAkihime/WrathCombo/actions/workflows/publish-plugin.yml/runs?status=success&per_page=5' -Headers $headers
-          $run = $runs.workflow_runs | Select-Object -First 1
-          if (-not $run) { throw 'No successful WrathCombo packaging workflow run found.' }
-
-          $artifacts = Invoke-RestMethod -Uri $run.artifacts_url -Headers $headers
-          $artifact = $artifacts.artifacts | Where-Object { $_.name -eq 'WrathComboCN-package' } | Select-Object -First 1
-          if (-not $artifact) { throw 'WrathComboCN-package artifact not found.' }
-
-          $downloadZip = Join-Path $env:RUNNER_TEMP 'WrathComboCN-artifact.zip'
-          Invoke-WebRequest -Uri $artifact.archive_download_url -Headers $headers -OutFile $downloadZip
-
-          Add-Type -AssemblyName System.IO.Compression.FileSystem
-          $artifactExtract = Join-Path $env:RUNNER_TEMP 'WrathComboCN-artifact'
-          if (Test-Path $artifactExtract) { Remove-Item $artifactExtract -Recurse -Force }
-          [System.IO.Compression.ZipFile]::ExtractToDirectory($downloadZip, $artifactExtract)
-
-          $cnZip = Join-Path $artifactExtract 'WrathComboCN-latest.zip'
-          if (-not (Test-Path $cnZip)) { throw 'WrathComboCN-latest.zip not found in artifact.' }
-
-          $releaseDir = Join-Path $env:GITHUB_WORKSPACE '_sources\WrathCombo\release\WrathCombo'
-          New-Item -ItemType Directory -Path $releaseDir -Force | Out-Null
-          Copy-Item $cnZip (Join-Path $releaseDir 'latest.zip') -Force
-
       - name: Build aggregated repo
         shell: pwsh
         run: |
@@ -141,3 +106,4 @@ jobs:
 
           git commit -m "自动同步插件源"
           git push
+
