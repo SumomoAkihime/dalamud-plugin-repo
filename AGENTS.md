@@ -91,6 +91,39 @@ ew(100, 100)).
 - `Ex8Enuo` intermission uses a much larger effective space than the main ring; keeping `ArenaSwitcher` bounds too small clips radar/callout visibility for shadow/add positioning. Prefer wide temporary square bounds during intermission parity work.
 - Reborn module files that look self-contained can still depend on newer fork-only API shapes in subtle ways: `uint` where this fork expects typed `Enum` ctor args, `ReadOnlySpan`/new `GenericAOEs` overrides, missing helper components (`InterceptTetherStatus`, `StatusStackSpread`, `Voidzone`), and stricter analyzer failures on imported enum names. For fast completion here, prefer rewriting these as minimal local skeleton modules instead of iterating on direct file ports.
 - Directly importing Reborn `Ad011PariofPlenty` split files (`Enums/States/FireFlight/LongNights`) into this fork currently fails hard: local `GenericAOEs` expects `IEnumerable`-based overrides and analyzer/style rules are treated as build errors, so bulk file ports generate dozens of compile/analyzer failures. For this module, prefer incremental visibility-only ports (alias/params/adds display) unless the framework/style baseline is aligned first.
+
+## ffxiv_bossmod 本地构建配置
+
+### 构建环境
+- **SDK**: .NET 10.0.203
+- **SDK 来源**: `d:\mod-source\_dalamud_tmp\` 目录包含从 Dalamud 发行版提取的预编译 DLL
+  - 核心 DLL: `Dalamud.dll`, `Dalamud.Common.dll`, `Dalamud.Bindings.ImGui.dll`, `Dalamud.Bindings.ImPlot.dll`
+  - 游戏数据: `FFXIVClientStructs.dll`, `InteropGenerator.Runtime.dll`, `Lumina.dll`, `Lumina.Excel.dll`
+  - 辅助库: `ImGuiScene.dll`, `TerraFX.Interop.Windows.dll`
+- **环境变量**: 构建前必须设置 `DALAMUD_HOME` 指向 SDK 目录
+  ```powershell
+  $env:DALAMUD_HOME = "d:\mod-source\_dalamud_tmp"
+  ```
+
+### SDK 仓库说明
+- `https://github.com/goatcorp/Dalamud` (`d:\mod-source\Dalamud`) — Dalamud 框架**源码**，需要自行编译才能生成 SDK DLL。不直接包含预编译 SDK
+- `https://github.com/goatcorp/DalamudPluginsD17` (`d:\mod-source\DalamudPluginsD17`) — 官方插件清单仓库，仅含 `manifest.toml` 元数据，**不含** SDK 文件
+- 当前使用的 SDK DLL 来自 Dalamud 发行版构建产物，非从以上仓库直接获取
+
+### 构建命令
+```powershell
+$env:DALAMUD_HOME = "d:\mod-source\_dalamud_tmp"
+dotnet build BossMod\BossMod.csproj -c Release
+```
+
+### 构建产物
+- `BossMod\bin\Release\BossMod.dll`
+- `BossMod\bin\Release\BossMod.json`（插件清单，InternalName: `BossMod`）
+- `BossMod\bin\Release\BossMod.pdb`
+
+### 已知 SDK 版本差异
+- `_dalamud_tmp` 中的 `FFXIVClientStructs` 版本不包含 `AtkValueType.ConstString` 枚举值，`DebugAddon.cs` 中已注释掉该分支
+- 如果后续 SDK 更新，可能需要取消该注释或调整相关代码
 - In this fork, `Components.CastLineOfSightAOE` constructor requires explicit `blockersImpassable` argument (`CastLineOfSightAOE(module, aid, range, blockersImpassable, ...)`); Reborn-style shorter constructor calls will fail with CS7036 until adapted.
 - In this fork, `Components.SimpleAOEs` does not expose Reborn-side tuning fields like `MaxDangerColor`; attempting to port those assignments causes compile errors. Keep ports to supported constructor parameters only.
 - In `ffxiv_bossmod`, analyzer rule IDE0065 is treated as build error; alias `using` directives inside file-scoped namespace blocks will fail Release build. For compatibility alias files, place top-level `using` aliases outside namespace and use fully-qualified type names.
