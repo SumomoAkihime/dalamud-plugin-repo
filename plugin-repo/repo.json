@@ -1,4 +1,4 @@
-﻿[
+[
     {
         "Author":  "Kouzukii",
         "Name":  "Character Panel Refined",
@@ -35,7 +35,7 @@
         "Author":  "veyn",
         "Name":  "Boss Mod",
         "InternalName":  "BossMod",
-        "AssemblyVersion":  "7.5.1.703",
+        "AssemblyVersion":  "7.5.1.704",
         "Description":  "Integrated Boss encounter toolkit with radar, mechanic hints, and combat assistance.",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/SumomoAkihime/ffxiv_bossmod",
