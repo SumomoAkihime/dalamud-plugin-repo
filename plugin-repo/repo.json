@@ -35,12 +35,18 @@
         "Author":  "veyn",
         "Name":  "Boss Mod",
         "InternalName":  "BossMod",
-        "AssemblyVersion":  "7.5.1.701",
+        "AssemblyVersion":  "7.5.1.702",
         "Description":  "Integrated Boss encounter toolkit with radar, mechanic hints, and combat assistance.",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/SumomoAkihime/ffxiv_bossmod",
         "Tags":  [
-
+                     "combat",
+                     "boss",
+                     "dodge",
+                     "mechanics",
+                     "pve",
+                     "raids",
+                     "trials"
                  ],
         "DalamudApiLevel":  15,
         "LoadRequiredState":  0,
@@ -51,7 +57,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1782294702,
+        "LastUpdate":  1782299539,
         "ImageUrls":  [
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image1.png",
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image2.png",

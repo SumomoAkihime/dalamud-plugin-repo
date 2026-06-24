@@ -300,6 +300,7 @@ function Get-ProjectEntry {
 $BaseUrl = Normalize-BaseUrl -Url $BaseUrl
 $repoConfig = Read-RepoConfig -Path $ConfigPath
 $excludedInternalNames = @($repoConfig.excludedInternalNames)
+$repoJsonPath = Join-Path $OutputRoot "repo.json"
 
 New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
 $pluginsOutputRoot = Join-Path $OutputRoot "plugins"
@@ -310,7 +311,12 @@ $projectDirs = Get-ChildItem $SourceRoot -Directory |
 
 $entries = @()
 foreach ($projectDir in $projectDirs) {
-    $entry = Get-ProjectEntry -ProjectDir $projectDir -BaseUrl $BaseUrl -OutputRoot $OutputRoot
+    try {
+        $entry = Get-ProjectEntry -ProjectDir $projectDir -BaseUrl $BaseUrl -OutputRoot $OutputRoot
+    } catch {
+        Write-Warning "Skipping $($projectDir.Name) because repository metadata could not be read: $($_.Exception.Message)"
+        continue
+    }
     if ($entry) {
         if ($excludedInternalNames -contains $entry.InternalName) {
             Write-Host "Excluded plugin: $($entry.InternalName)"
@@ -320,7 +326,22 @@ foreach ($projectDir in $projectDirs) {
     }
 }
 
-$repoJsonPath = Join-Path $OutputRoot "repo.json"
+if (Test-Path $repoJsonPath) {
+    try {
+        $existingEntries = @((Get-Content $repoJsonPath -Raw | ConvertFrom-Json) | ForEach-Object { $_ })
+        foreach ($existingEntry in $existingEntries) {
+            $internalName = [string]$existingEntry.InternalName
+            $packagePath = Join-Path $OutputRoot "plugins\$internalName\latest.zip"
+            if ($internalName -and -not ($entries.InternalName -contains $internalName) -and (Test-Path $packagePath)) {
+                Write-Host "Preserved existing plugin: $internalName"
+                $entries += $existingEntry
+            }
+        }
+    } catch {
+        Write-Warning "Could not preserve existing repo entries from ${repoJsonPath}: $($_.Exception.Message)"
+    }
+}
+
 $entryArray = @($entries)
 if ($entryArray.Count -eq 1) {
     $repoJson = "[`r`n" + (ConvertTo-Json -InputObject $entryArray[0] -Depth 6) + "`r`n]"
