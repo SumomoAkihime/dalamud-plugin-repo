@@ -1,0 +1,16 @@
+.git/
+
+# Child source repositories stay independent.
+/ffxiv-characterstatus-refined/
+/WrathCombo/
+/ffxiv_bossmod/
+/BossmodReborn/
+/_dalamud_tmp/
+
+# PowerShell / editor noise
+*.user
+*.suo
+.vs/
+
+# Optional local test output
+/plugin-repo-test/
