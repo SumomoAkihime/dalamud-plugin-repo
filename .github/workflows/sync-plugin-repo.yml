@@ -32,7 +32,7 @@ jobs:
           New-Item -ItemType Directory -Path $sourcesRoot -Force | Out-Null
 
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv-characterstatus-refined.git (Join-Path $sourcesRoot 'ffxiv-characterstatus-refined')
-          git clone --depth 1 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
+          git clone --depth 1 --branch test2 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
           git clone --depth 1 https://github.com/SumomoAkihime/ReMakePalce.git (Join-Path $sourcesRoot 'ReMakePalce')
           git clone --depth 1 --recurse-submodules https://github.com/SumomoAkihime/Ices-Cosmic-Exploration.git (Join-Path $sourcesRoot 'Ices-Cosmic-Exploration')
 
