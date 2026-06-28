@@ -330,6 +330,10 @@ if (Test-Path $repoJsonPath) {
     try {
         $existingEntries = @((Get-Content $repoJsonPath -Raw | ConvertFrom-Json) | ForEach-Object { $_ })
         foreach ($existingEntry in $existingEntries) {
+            if ($existingEntry.PSObject.Properties.Name -notcontains "InternalName") {
+                continue
+            }
+
             $internalName = [string]$existingEntry.InternalName
             $packagePath = Join-Path $OutputRoot "plugins\$internalName\latest.zip"
             if ($internalName -and -not ($entries.InternalName -contains $internalName) -and (Test-Path $packagePath)) {
@@ -351,4 +355,5 @@ if ($entryArray.Count -eq 1) {
 Set-Content -Path $repoJsonPath -Value $repoJson -Encoding UTF8
 
 Write-Host "Generated $repoJsonPath"
-Write-Host "Included plugins: $($entries.InternalName -join ', ')"
+$includedNames = @($entries | Where-Object { $_.PSObject.Properties.Name -contains "InternalName" } | ForEach-Object { $_.InternalName })
+Write-Host "Included plugins: $($includedNames -join ', ')"
