@@ -229,4 +229,5 @@ dotnet build BossMod\BossMod.csproj -c Release
 - `ffxiv_bossmod/test2` 的 autorotation preset/plan JSON 和 IPC transient strategy 接口里保存/传入的是非程序集限定类型名。`Type.GetType(...)` 在运行时可能解析不到同程序集模块/副本类型，导致默认 preset、用户 plan 或外部插件传入的模块名被跳过，游戏里表现为 Autorotation 窗口只剩 `Disabled` 或 IPC 调整失效。读取 preset/plan/manifest/IPC 模块名时必须保留 `typeof(...).Assembly.GetType(...)` fallback。
 - `ffxiv_bossmod/test2` 从 Reborn 配置切到 awgil autorotation 配置时，Reborn 字段名是 `HideDefaultPresets`，awgil 字段名是 `HideDefaultPreset`。同版本配置文件不会触发 schema converter，因此 `AutorotationConfig.Deserialize` 需要直接兼容旧字段；否则用户旧配置的隐藏开关状态会静默丢失。
 - `ffxiv_bossmod` 做中文 UI 适配时，当前 Dalamud SDK 文档里的 `ClientLanguage` 可能只列出日/英/德/法，不要硬编码不存在的 `ChineseSimplified`/`ChineseTraditional` 枚举。中文检测应优先使用 `ClientState.ClientLanguage`、反射读取的 `DataManager.Language`、Lumina 资料片名称、`CultureInfo` 的字符串信号，并将中文文本放在独立嵌入资源（如 `Localization/zh-CN.json`），避免直接改散落的英文 `ConfigDisplay`/`PropertyDisplay` 文案造成上游冲突。
+- `ffxiv_bossmod/test2` 的 `VBM AI` 预设不只是普通辅助技能预设：用户期望它同时具备 Reborn `AI: On` 的自动移动/躲避能力，但又不能和信息栏 AI 开关互相覆盖。实现上应让手动激活的 `VBM AI` 自动拉起一个不拥有预设的 `AIBehaviour` 来驱动移动；不要让该行为反复 `Activate/Deactivate` 用户手动点亮的 `VBM AI` 预设，也不要清掉同时启用的 `VBM Default`。
 
