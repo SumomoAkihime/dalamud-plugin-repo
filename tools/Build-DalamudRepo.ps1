@@ -16,16 +16,18 @@ if ($PSScriptRoot) {
     $ScriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 }
 
+$RepoRoot = (Resolve-Path (Join-Path $ScriptRoot "..")).Path
+
 if ([string]::IsNullOrWhiteSpace($SourceRoot)) {
-    $SourceRoot = (Resolve-Path (Join-Path $ScriptRoot "..")).Path
+    $SourceRoot = (Resolve-Path (Join-Path $RepoRoot "..")).Path
 }
 
 if ([string]::IsNullOrWhiteSpace($OutputRoot)) {
-    $OutputRoot = Join-Path $SourceRoot "plugin-repo"
+    $OutputRoot = Join-Path $RepoRoot "plugin-repo"
 }
 
 if ([string]::IsNullOrWhiteSpace($ConfigPath)) {
-    $ConfigPath = Join-Path $SourceRoot "repo-config.json"
+    $ConfigPath = Join-Path $RepoRoot "repo-config.json"
 }
 
 function Normalize-BaseUrl {
@@ -307,7 +309,7 @@ $pluginsOutputRoot = Join-Path $OutputRoot "plugins"
 New-Item -ItemType Directory -Path $pluginsOutputRoot -Force | Out-Null
 
 $projectDirs = Get-ChildItem $SourceRoot -Directory |
-    Where-Object { $_.Name -notin @("plugin-repo", "tools", ".git") }
+    Where-Object { $_.Name -notin @("dalamud-plugin-repo", "plugin-repo", "tools", ".git") }
 
 $entries = @()
 foreach ($projectDir in $projectDirs) {
@@ -330,10 +332,6 @@ if (Test-Path $repoJsonPath) {
     try {
         $existingEntries = @((Get-Content $repoJsonPath -Raw | ConvertFrom-Json) | ForEach-Object { $_ })
         foreach ($existingEntry in $existingEntries) {
-            if ($existingEntry.PSObject.Properties.Name -notcontains "InternalName") {
-                continue
-            }
-
             $internalName = [string]$existingEntry.InternalName
             $packagePath = Join-Path $OutputRoot "plugins\$internalName\latest.zip"
             if ($internalName -and -not ($entries.InternalName -contains $internalName) -and (Test-Path $packagePath)) {
@@ -355,5 +353,4 @@ if ($entryArray.Count -eq 1) {
 Set-Content -Path $repoJsonPath -Value $repoJson -Encoding UTF8
 
 Write-Host "Generated $repoJsonPath"
-$includedNames = @($entries | Where-Object { $_.PSObject.Properties.Name -contains "InternalName" } | ForEach-Object { $_.InternalName })
-Write-Host "Included plugins: $($includedNames -join ', ')"
+Write-Host "Included plugins: $($entries.InternalName -join ', ')"
