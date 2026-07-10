@@ -236,3 +236,5 @@ dotnet build BossMod\BossMod.csproj -c Release
 - Reborn 7.5.1.19 机制代码大量使用新版 C# 集合容量提示写法 `[with(n)]`；当前本地 SDK/编译器会把它解析成普通标识符并报 `CS0103: with`。发布前若直接同步 Reborn 机制目录，需要机械转换为等价 `new(n)`，不要逐个手改机制逻辑。
 - 从 Reborn 同步 encounter AI/rotation 文件时，旧签名 `Execute(StrategyValues, Actor? primaryTarget, ...)` 必须改为本 fork 的 `Execute(StrategyValues, ref Actor? primaryTarget, ...)`；否则 Release build 会报 `CS0115/CS0534`。
 - 每次完成有效源码、脚本或发布清单修改后，应尽快提交并推送对应仓库，避免长时间保留脏改动导致后续无法判断来源；临时验证文件应在同轮清理，不要加入暂存区。
+- `Dawntrail/Trial/T06Arkveld` 的 Reborn 简化模块使用 `Maturity.WIP`，默认最低成熟度为 `Contributed` 时不会自动加载；原版 `T06GuardianArkveld` 使用相同任务标识（`GroupID=1043`、`NameID=14237`、主 OID `0x48E2`）且机制更完整。移植时只能保留一个可加载的 `BossModule` 注册，避免同 OID 重复注册导致加载顺序不确定。
+- `ffxiv_bossmod/UPSTREAM_SYNC_PLAYBOOK.md` 已随 Reborn 基线切换从当前工作树移除；不要把旧线程里对该文件的引用当作当前必备文件，现阶段以上级发布仓 `AGENTS.md` 的同步与发布规则为准。
