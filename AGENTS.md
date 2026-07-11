@@ -240,3 +240,5 @@ dotnet build BossMod\BossMod.csproj -c Release
 - `ffxiv_bossmod/UPSTREAM_SYNC_PLAYBOOK.md` 已随 Reborn 基线切换从当前工作树移除；不要把旧线程里对该文件的引用当作当前必备文件，现阶段以上级发布仓 `AGENTS.md` 的同步与发布规则为准。
 - `Shadowbringers/Alliance` 的原版与 Reborn 编号在第一个团本存在漂移：原版 `A11 SerialJointedCommandModel`、`A12 Hobbes`、`A13 GoliathTank`、`A14 Engels`、`A15 WalkingFortress`；旧 Reborn 目录曾把 Engels/WalkingFortress 命名为 A13/A14，并完全缺少 GoliathTank。对照时必须按 `GroupID=700`、`NameID` 和主 OID 映射，不能按文件夹编号覆盖。
 - PowerShell 5.1 双引号插值中，变量后紧跟冒号时必须写成 `${name}:`，不能写 `$name:`；`foreach` 结果参与表达式赋值时使用 `$(foreach (...) { ... })`。另外，ripgrep 默认正则不支持 look-around，需要显式传 `--pcre2`。
+- 从 awgil 原版移植当前 Reborn 基线模块时，tether 回调签名必须使用 `OnTethered(Actor source, in ActorTetherInfo tether)`（`OnUntethered` 同理）；旧签名缺少 `in` 会触发 `CS0115`。
+- 当前 Reborn 基线的 `GenericAOEs.ActiveAOEs` / `GenericKnockback.ActiveKnockbacks` 返回 `ReadOnlySpan<T>` 时，不能直接返回可能逃逸的 `[new(...)]` 集合表达式（`CS9203`），应返回显式数组。awgil 旧版 AI 禁区 lambda/`ShapeContains` 也需改为当前 `ShapeDistance`、`SDUnion`、`SDOutsideOfUnion` 等实现。
