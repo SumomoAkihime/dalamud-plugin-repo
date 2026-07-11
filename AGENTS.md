@@ -238,3 +238,5 @@ dotnet build BossMod\BossMod.csproj -c Release
 - 每次完成有效源码、脚本或发布清单修改后，应尽快提交并推送对应仓库，避免长时间保留脏改动导致后续无法判断来源；临时验证文件应在同轮清理，不要加入暂存区。
 - `Dawntrail/Trial/T06Arkveld` 的 Reborn 简化模块使用 `Maturity.WIP`，默认最低成熟度为 `Contributed` 时不会自动加载；原版 `T06GuardianArkveld` 使用相同任务标识（`GroupID=1043`、`NameID=14237`、主 OID `0x48E2`）且机制更完整。移植时只能保留一个可加载的 `BossModule` 注册，避免同 OID 重复注册导致加载顺序不确定。
 - `ffxiv_bossmod/UPSTREAM_SYNC_PLAYBOOK.md` 已随 Reborn 基线切换从当前工作树移除；不要把旧线程里对该文件的引用当作当前必备文件，现阶段以上级发布仓 `AGENTS.md` 的同步与发布规则为准。
+- `Shadowbringers/Alliance` 的原版与 Reborn 编号在第一个团本存在漂移：原版 `A11 SerialJointedCommandModel`、`A12 Hobbes`、`A13 GoliathTank`、`A14 Engels`、`A15 WalkingFortress`；旧 Reborn 目录曾把 Engels/WalkingFortress 命名为 A13/A14，并完全缺少 GoliathTank。对照时必须按 `GroupID=700`、`NameID` 和主 OID 映射，不能按文件夹编号覆盖。
+- PowerShell 5.1 双引号插值中，变量后紧跟冒号时必须写成 `${name}:`，不能写 `$name:`；`foreach` 结果参与表达式赋值时使用 `$(foreach (...) { ... })`。另外，ripgrep 默认正则不支持 look-around，需要显式传 `--pcre2`。
