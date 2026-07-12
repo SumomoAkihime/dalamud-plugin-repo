@@ -242,3 +242,4 @@ dotnet build BossMod\BossMod.csproj -c Release
 - PowerShell 5.1 双引号插值中，变量后紧跟冒号时必须写成 `${name}:`，不能写 `$name:`；`foreach` 结果参与表达式赋值时使用 `$(foreach (...) { ... })`。另外，ripgrep 默认正则不支持 look-around，需要显式传 `--pcre2`。
 - 从 awgil 原版移植当前 Reborn 基线模块时，tether 回调签名必须使用 `OnTethered(Actor source, in ActorTetherInfo tether)`（`OnUntethered` 同理）；旧签名缺少 `in` 会触发 `CS0115`。
 - 当前 Reborn 基线的 `GenericAOEs.ActiveAOEs` / `GenericKnockback.ActiveKnockbacks` 返回 `ReadOnlySpan<T>` 时，不能直接返回可能逃逸的 `[new(...)]` 集合表达式（`CS9203`），应返回显式数组。awgil 旧版 AI 禁区 lambda/`ShapeContains` 也需改为当前 `ShapeDistance`、`SDUnion`、`SDOutsideOfUnion` 等实现。
+- `RealmReborn/Alliance` 第一个 24 人团本的原版战斗顺序是 `A11 BoneDragon`、`A12 Atomos`、`A13 Thanatos`、`A14 AllaganBomb`、`A15 KingBehemoth`、`A16 Phlegethon`。旧 Reborn 只保留四个 Boss 并编号为 A11～A14，缺少 Atomos 与 AllaganBomb；同步时必须按名称、`GroupID=92`、`NameID`、主 OID 映射，不能按编号直接覆盖。
