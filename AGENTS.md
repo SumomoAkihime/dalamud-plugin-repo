@@ -246,3 +246,4 @@ dotnet build BossMod\BossMod.csproj -c Release
 - `ffxiv_bossmod` 的 `reborn` 远端指向本地 `BossmodReborn` 路径：同步前必须先在对照仓执行 fetch 并将 `main` 快进到 `origin/main`，否则源码仓 fetch 到的仍是旧提交。当前源码仓与 Reborn 没有可用的共同合并历史，禁止直接 `git merge reborn/main`；应记录上次 Reborn 同步点，并按该点到新版的非合并提交顺序 cherry-pick/增量移植，避免整仓伪冲突。
 - `ffxiv_bossmod` 的 `AI: On/Off` 必须只控制 `AIBehaviour` 的移动与机制躲避；禁止在 `RotationModuleManager` 中根据 `AIConfig.Enabled` 自动添加、移除或重建 `VBM Multibox`（或任何 autorotation preset）。`VBM Multibox`、`VBM Default`、`VBM AI` 均只能由用户显式控制，否则 AI 开关仍会间接关联自动循环。
 - `ffxiv_bossmod` 发布时普通 `dotnet build -c Release` 偶尔会仅返回成功但不刷新 `bin/Release/BossMod/latest.zip`。每次构建后必须校验 zip 的修改时间及包内 `BossMod.json` 版本；若仍为旧包，使用 `dotnet build -c Release BossMod/BossMod.csproj --no-restore -t:Rebuild` 强制重新编译打包，禁止继续发布旧产物。
+- `ffxiv_bossmod` 的基础 `AI: On/Off` 不得把玩家当前选中的攻击目标传给 `AIBehaviour.BuildNavigationDecision`，也不得添加贴近敌人的 `GoalSingleTarget`；否则即使已解除 `VBM Multibox` 预设关联，AI 仍会表现为主动向目标移动。基础 AI 只保留机制安全区/强制交互导航；用户明确选择非自身 `FollowSlot` 时才允许跟随队伍成员。
