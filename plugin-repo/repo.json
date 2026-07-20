@@ -70,7 +70,7 @@
         "Author":  "Ice",
         "Name":  "ICE CN 月面宇宙探索",
         "InternalName":  "ICECN",
-        "AssemblyVersion":  "0.0.78.23",
+        "AssemblyVersion":  "1.0.0.1",
         "Description":  "用于自动化宇宙探索采集、制作、任务重抽与商店购买的小助手。",
         "ApplicableVersion":  "any",
         "RepoUrl":  "https://github.com/SumomoAkihime/Ices-Cosmic-Exploration",
@@ -88,7 +88,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ICECN/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ICECN/latest.zip",
-        "LastUpdate":  1784540105,
+        "LastUpdate":  1784553363,
         "IconUrl":  "https://puni.sh/api/plugins/icon/70",
         "AcceptsFeedback":  true
     },
