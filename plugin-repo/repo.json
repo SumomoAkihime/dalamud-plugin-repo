@@ -20,7 +20,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/CharacterPanelRefined/latest.zip",
-        "LastUpdate":  1784623382,
+        "LastUpdate":  1784643606,
         "CategoryTags":  [
                              "ui"
                          ],
@@ -57,7 +57,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
-        "LastUpdate":  1784623385,
+        "LastUpdate":  1784643611,
         "ImageUrls":  [
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image1.png",
                           "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image2.png",
@@ -88,7 +88,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ICECN/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ICECN/latest.zip",
-        "LastUpdate":  1784623511,
+        "LastUpdate":  1784643732,
         "IconUrl":  "https://puni.sh/api/plugins/icon/70",
         "AcceptsFeedback":  true
     },
@@ -116,7 +116,7 @@
         "Changelog":  "",
         "DownloadLinkInstall":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ReMakePlacePlugin/latest.zip",
         "DownloadLinkUpdate":  "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/ReMakePlacePlugin/latest.zip",
-        "LastUpdate":  1784623499,
+        "LastUpdate":  1784643718,
         "IconUrl":  "https://raw.githubusercontent.com/ReMakePlace/Plugin/master/icon.png",
         "AcceptsFeedback":  true
     }
