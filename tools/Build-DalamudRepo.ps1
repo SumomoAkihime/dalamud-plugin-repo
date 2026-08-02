@@ -291,24 +291,38 @@ function Get-ProjectEntry {
     $outputPluginDir = Join-Path $OutputRoot "plugins\$internalName"
     New-Item -ItemType Directory -Path $outputPluginDir -Force | Out-Null
     $outputPackagePath = Join-Path $outputPluginDir "latest.zip"
+    $outputPackageExists = Test-Path -LiteralPath $outputPackagePath
     $sourceHash = Get-FileSha256 -Path $packagePath
-    $outputHash = if (Test-Path -LiteralPath $outputPackagePath) {
+    $outputHash = if ($outputPackageExists) {
         Get-FileSha256 -Path $outputPackagePath
     } else {
         ""
     }
-    $packageChanged = $sourceHash -ne $outputHash
+    $existingVersion = if (
+        $null -ne $ExistingEntry -and
+        $ExistingEntry.PSObject.Properties.Name -contains "AssemblyVersion"
+    ) {
+        [string]$ExistingEntry.AssemblyVersion
+    } else {
+        ""
+    }
+    $sameVersion = $existingVersion -eq $version
+    $publishPackage = -not $outputPackageExists -or -not $sameVersion
 
-    if ($packageChanged) {
-        Copy-Item -LiteralPath $packagePath -Destination $outputPackagePath -Force
+    if ($publishPackage) {
+        if ($sourceHash -ne $outputHash) {
+            Copy-Item -LiteralPath $packagePath -Destination $outputPackagePath -Force
+        }
         Write-Host "Updated package: $internalName"
+    } elseif ($sourceHash -ne $outputHash) {
+        Write-Host "Preserved package: $internalName (same version, different build output)"
     } else {
         Write-Host "Unchanged package: $internalName"
     }
 
     $downloadUrl = "{0}/plugins/{1}/latest.zip" -f $BaseUrl, $internalName
     $lastUpdate = if (
-        -not $packageChanged -and
+        -not $publishPackage -and
         $null -ne $ExistingEntry -and
         $ExistingEntry.PSObject.Properties.Name -contains "LastUpdate"
     ) {
