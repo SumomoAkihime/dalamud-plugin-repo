@@ -4,7 +4,9 @@ param(
 
     [string]$SourceRoot = "",
     [string]$OutputRoot = "",
-    [string]$ConfigPath = ""
+    [string]$ConfigPath = "",
+
+    [string[]]$InternalName = @()
 )
 
 Set-StrictMode -Version Latest
@@ -17,6 +19,30 @@ if ($PSScriptRoot) {
 }
 
 $RepoRoot = (Resolve-Path (Join-Path $ScriptRoot "..")).Path
+
+function Read-Utf8Text {
+    param([string]$Path)
+
+    $text = [System.IO.File]::ReadAllText($Path, [System.Text.Encoding]::UTF8)
+    return $text.TrimStart([char]0xFEFF)
+}
+
+function Write-Utf8Text {
+    param(
+        [string]$Path,
+        [string]$Text
+    )
+
+    $normalized = ($Text -replace "`r?`n", "`r`n").TrimEnd("`r", "`n") + "`r`n"
+    $utf8Bom = New-Object System.Text.UTF8Encoding($true)
+    [System.IO.File]::WriteAllText($Path, $normalized, $utf8Bom)
+}
+
+function Get-FileSha256 {
+    param([string]$Path)
+
+    return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash
+}
 
 if ([string]::IsNullOrWhiteSpace($SourceRoot)) {
     $SourceRoot = (Resolve-Path (Join-Path $RepoRoot "..")).Path
@@ -44,7 +70,7 @@ function ConvertTo-UnixTimestamp {
 function Read-CsprojVersion {
     param([string]$CsprojPath)
 
-    [xml]$xml = Get-Content $CsprojPath
+    [xml]$xml = Read-Utf8Text -Path $CsprojPath
     $versionNode = $xml.SelectSingleNode("//Project/PropertyGroup/Version")
     if (-not $versionNode -or [string]::IsNullOrWhiteSpace($versionNode.InnerText)) {
         throw "Could not find <Version> in $CsprojPath"
@@ -55,7 +81,7 @@ function Read-CsprojVersion {
 
 function Read-JsonManifest {
     param([string]$Path)
-    return Get-Content $Path -Raw | ConvertFrom-Json
+    return Read-Utf8Text -Path $Path | ConvertFrom-Json
 }
 
 function Read-RepoConfig {
@@ -67,7 +93,7 @@ function Read-RepoConfig {
         }
     }
 
-    return Get-Content $Path -Raw | ConvertFrom-Json
+    return Read-Utf8Text -Path $Path | ConvertFrom-Json
 }
 
 function Read-ZipManifest {
@@ -95,7 +121,7 @@ function Read-ZipManifest {
             return $null
         }
 
-        $reader = New-Object System.IO.StreamReader($entry.Open())
+        $reader = New-Object System.IO.StreamReader($entry.Open(), [System.Text.Encoding]::UTF8, $true)
         try {
             $json = $reader.ReadToEnd()
         } finally {
@@ -114,7 +140,7 @@ function Read-SimpleYamlManifest {
     $result = @{}
     $currentListKey = $null
 
-    foreach ($rawLine in Get-Content $Path) {
+    foreach ($rawLine in [System.IO.File]::ReadAllLines($Path, [System.Text.Encoding]::UTF8)) {
         $line = $rawLine.TrimEnd()
         if ([string]::IsNullOrWhiteSpace($line)) { continue }
         if ($line.TrimStart().StartsWith("#")) { continue }
@@ -196,28 +222,27 @@ function Get-ProjectEntry {
     param(
         [System.IO.DirectoryInfo]$ProjectDir,
         [string]$BaseUrl,
-        [string]$OutputRoot
+        [string]$OutputRoot,
+        [string]$ExpectedInternalName = "",
+        [psobject]$ExistingEntry = $null
     )
 
-    $manifestInfo = Get-ManifestMetadata -ProjectRoot $ProjectDir.FullName
-    if (-not $manifestInfo) {
-        return $null
-    }
+    $manifestInfo = $null
+    $manifest = $null
+    $internalName = $ExpectedInternalName
 
-    $csproj = Get-ChildItem $ProjectDir.FullName -Recurse -File -Filter *.csproj |
-        Where-Object { $_.BaseName -eq $_.Directory.Name } |
-        Select-Object -First 1
+    if ([string]::IsNullOrWhiteSpace($internalName)) {
+        $manifestInfo = Get-ManifestMetadata -ProjectRoot $ProjectDir.FullName
+        if (-not $manifestInfo) {
+            return $null
+        }
 
-    if (-not $csproj) {
-        throw "Could not find matching .csproj under $($ProjectDir.FullName)"
-    }
-
-    $manifest = $manifestInfo.Data
-
-    $internalName = if ($manifest.PSObject.Properties.Name -contains "InternalName") {
-        [string]$manifest.InternalName
-    } else {
-        [string]([System.IO.Path]::GetFileNameWithoutExtension($manifestInfo.Path))
+        $manifest = $manifestInfo.Data
+        $internalName = if ($manifest.PSObject.Properties.Name -contains "InternalName") {
+            [string]$manifest.InternalName
+        } else {
+            [string]([System.IO.Path]::GetFileNameWithoutExtension($manifestInfo.Path))
+        }
     }
 
     $packageCandidates = @(
@@ -236,19 +261,61 @@ function Get-ProjectEntry {
     if ($packageManifest) {
         $manifest = $packageManifest
         if ($packageManifest.PSObject.Properties.Name -contains "InternalName" -and $packageManifest.InternalName) {
-            $internalName = [string]$packageManifest.InternalName
+            $packageInternalName = [string]$packageManifest.InternalName
+            if ($ExpectedInternalName -and $packageInternalName -ne $ExpectedInternalName) {
+                throw "Package InternalName '$packageInternalName' does not match configured name '$ExpectedInternalName'."
+            }
+            $internalName = $packageInternalName
         }
         $version = [string]$packageManifest.AssemblyVersion
     } else {
+        if (-not $manifestInfo) {
+            $manifestInfo = Get-ManifestMetadata -ProjectRoot $ProjectDir.FullName
+            if (-not $manifestInfo) {
+                throw "Could not find manifest under $($ProjectDir.FullName)"
+            }
+            $manifest = $manifestInfo.Data
+        }
+
+        $csproj = Get-ChildItem $ProjectDir.FullName -Recurse -File -Filter *.csproj |
+            Where-Object { $_.BaseName -eq $_.Directory.Name } |
+            Select-Object -First 1
+
+        if (-not $csproj) {
+            throw "Could not find matching .csproj under $($ProjectDir.FullName)"
+        }
+
         $version = Read-CsprojVersion -CsprojPath $csproj.FullName
     }
 
     $outputPluginDir = Join-Path $OutputRoot "plugins\$internalName"
     New-Item -ItemType Directory -Path $outputPluginDir -Force | Out-Null
-    Copy-Item $packagePath (Join-Path $outputPluginDir "latest.zip") -Force
+    $outputPackagePath = Join-Path $outputPluginDir "latest.zip"
+    $sourceHash = Get-FileSha256 -Path $packagePath
+    $outputHash = if (Test-Path -LiteralPath $outputPackagePath) {
+        Get-FileSha256 -Path $outputPackagePath
+    } else {
+        ""
+    }
+    $packageChanged = $sourceHash -ne $outputHash
+
+    if ($packageChanged) {
+        Copy-Item -LiteralPath $packagePath -Destination $outputPackagePath -Force
+        Write-Host "Updated package: $internalName"
+    } else {
+        Write-Host "Unchanged package: $internalName"
+    }
 
     $downloadUrl = "{0}/plugins/{1}/latest.zip" -f $BaseUrl, $internalName
-    $lastUpdate = ConvertTo-UnixTimestamp -Date (Get-Item $packagePath).LastWriteTimeUtc
+    $lastUpdate = if (
+        -not $packageChanged -and
+        $null -ne $ExistingEntry -and
+        $ExistingEntry.PSObject.Properties.Name -contains "LastUpdate"
+    ) {
+        [int64]$ExistingEntry.LastUpdate
+    } else {
+        ConvertTo-UnixTimestamp -Date ([datetime]::UtcNow)
+    }
 
     $tags = @()
     if ($manifest.PSObject.Properties.Name -contains "Tags" -and $null -ne $manifest.Tags) {
@@ -302,55 +369,173 @@ function Get-ProjectEntry {
 $BaseUrl = Normalize-BaseUrl -Url $BaseUrl
 $repoConfig = Read-RepoConfig -Path $ConfigPath
 $excludedInternalNames = @($repoConfig.excludedInternalNames)
+$requestedInternalNames = @(
+    $InternalName |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Select-Object -Unique
+)
 $repoJsonPath = Join-Path $OutputRoot "repo.json"
 
 New-Item -ItemType Directory -Path $OutputRoot -Force | Out-Null
 $pluginsOutputRoot = Join-Path $OutputRoot "plugins"
 New-Item -ItemType Directory -Path $pluginsOutputRoot -Force | Out-Null
 
-$projectDirs = Get-ChildItem $SourceRoot -Directory |
-    Where-Object { $_.Name -notin @("dalamud-plugin-repo", "plugin-repo", "tools", ".git") }
+$existingEntries = @()
+if (Test-Path -LiteralPath $repoJsonPath) {
+    $existingEntries = @(
+        (Read-Utf8Text -Path $repoJsonPath | ConvertFrom-Json) |
+            ForEach-Object { $_ }
+    )
+}
 
-$entries = @()
-foreach ($projectDir in $projectDirs) {
-    try {
-        $entry = Get-ProjectEntry -ProjectDir $projectDir -BaseUrl $BaseUrl -OutputRoot $OutputRoot
-    } catch {
-        Write-Warning "Skipping $($projectDir.Name) because repository metadata could not be read: $($_.Exception.Message)"
-        continue
-    }
-    if ($entry) {
-        if ($excludedInternalNames -contains $entry.InternalName) {
-            Write-Host "Excluded plugin: $($entry.InternalName)"
-            continue
-        }
-        $entries += $entry
+$existingByInternalName = @{}
+foreach ($existingEntry in $existingEntries) {
+    $existingName = [string]$existingEntry.InternalName
+    if ($existingName) {
+        $existingByInternalName[$existingName] = $existingEntry
     }
 }
 
-if (Test-Path $repoJsonPath) {
-    try {
-        $existingEntries = @((Get-Content $repoJsonPath -Raw | ConvertFrom-Json) | ForEach-Object { $_ })
-        foreach ($existingEntry in $existingEntries) {
-            $internalName = [string]$existingEntry.InternalName
-            $packagePath = Join-Path $OutputRoot "plugins\$internalName\latest.zip"
-            if ($internalName -and -not ($entries.InternalName -contains $internalName) -and (Test-Path $packagePath)) {
-                Write-Host "Preserved existing plugin: $internalName"
-                $entries += $existingEntry
-            }
+$entries = @()
+$configuredProjects = if ($repoConfig.PSObject.Properties.Name -contains "projects") {
+    @($repoConfig.projects)
+} else {
+    @()
+}
+
+if ($configuredProjects.Count -gt 0) {
+    foreach ($requestedName in $requestedInternalNames) {
+        if (-not ($configuredProjects.internalName -contains $requestedName)) {
+            throw "No project directory is configured for requested plugin '$requestedName'."
         }
-    } catch {
-        Write-Warning "Could not preserve existing repo entries from ${repoJsonPath}: $($_.Exception.Message)"
+    }
+
+    foreach ($project in $configuredProjects) {
+        $configuredName = [string]$project.internalName
+        if ($requestedInternalNames.Count -gt 0 -and -not ($requestedInternalNames -contains $configuredName)) {
+            continue
+        }
+        if ($excludedInternalNames -contains $configuredName) {
+            Write-Host "Excluded plugin: $configuredName"
+            continue
+        }
+
+        $projectPath = Join-Path $SourceRoot ([string]$project.directory)
+        if (-not (Test-Path -LiteralPath $projectPath -PathType Container)) {
+            if ($requestedInternalNames -contains $configuredName) {
+                throw "Configured project directory does not exist: $projectPath"
+            }
+            Write-Warning "Configured project directory does not exist; preserving existing plugin if available: $projectPath"
+            continue
+        }
+
+        try {
+            $entry = Get-ProjectEntry `
+                -ProjectDir (Get-Item -LiteralPath $projectPath) `
+                -BaseUrl $BaseUrl `
+                -OutputRoot $OutputRoot `
+                -ExpectedInternalName $configuredName `
+                -ExistingEntry $existingByInternalName[$configuredName]
+        } catch {
+            if ($requestedInternalNames -contains $configuredName) {
+                throw
+            }
+            Write-Warning "Skipping $configuredName because repository metadata could not be read: $($_.Exception.Message)"
+            continue
+        }
+
+        if ($entry) {
+            $entries += $entry
+        }
+    }
+} else {
+    $projectDirs = Get-ChildItem $SourceRoot -Directory |
+        Where-Object { $_.Name -notin @("dalamud-plugin-repo", "plugin-repo", "tools", ".git") }
+
+    foreach ($projectDir in $projectDirs) {
+        try {
+            $entry = Get-ProjectEntry -ProjectDir $projectDir -BaseUrl $BaseUrl -OutputRoot $OutputRoot
+        } catch {
+            Write-Warning "Skipping $($projectDir.Name) because repository metadata could not be read: $($_.Exception.Message)"
+            continue
+        }
+        if ($entry) {
+            if ($requestedInternalNames.Count -gt 0 -and -not ($requestedInternalNames -contains $entry.InternalName)) {
+                continue
+            }
+            if ($excludedInternalNames -contains $entry.InternalName) {
+                Write-Host "Excluded plugin: $($entry.InternalName)"
+                continue
+            }
+            $entries += $entry
+        }
+    }
+}
+
+foreach ($requestedName in $requestedInternalNames) {
+    if (-not ($entries.InternalName -contains $requestedName)) {
+        throw "Requested plugin was not generated: $requestedName"
+    }
+}
+
+$generatedEntries = @($entries)
+$entries = @()
+$addedInternalNames = @{}
+foreach ($existingEntry in $existingEntries) {
+    $existingName = [string]$existingEntry.InternalName
+    if (-not $existingName -or $excludedInternalNames -contains $existingName) {
+        continue
+    }
+
+    $generatedEntry = $generatedEntries |
+        Where-Object { $_.InternalName -eq $existingName } |
+        Select-Object -First 1
+    if ($generatedEntry) {
+        $entries += $generatedEntry
+        $addedInternalNames[$existingName] = $true
+        continue
+    }
+
+    $packagePath = Join-Path $OutputRoot "plugins\$existingName\latest.zip"
+    if (Test-Path -LiteralPath $packagePath) {
+        Write-Host "Preserved existing plugin: $existingName"
+        $entries += $existingEntry
+        $addedInternalNames[$existingName] = $true
+    }
+}
+
+foreach ($generatedEntry in $generatedEntries) {
+    $generatedName = [string]$generatedEntry.InternalName
+    if (-not $addedInternalNames.ContainsKey($generatedName)) {
+        $entries += $generatedEntry
+        $addedInternalNames[$generatedName] = $true
     }
 }
 
 $entryArray = @($entries)
-if ($entryArray.Count -eq 1) {
+if ($entryArray.Count -eq 0) {
+    $repoJson = "[]"
+} elseif ($entryArray.Count -eq 1) {
     $repoJson = "[`r`n" + (ConvertTo-Json -InputObject $entryArray[0] -Depth 6) + "`r`n]"
 } else {
     $repoJson = ConvertTo-Json -InputObject $entryArray -Depth 6
 }
-Set-Content -Path $repoJsonPath -Value $repoJson -Encoding UTF8
+
+$writeRepoJson = $true
+if (Test-Path -LiteralPath $repoJsonPath) {
+    $existingJsonObject = Read-Utf8Text -Path $repoJsonPath | ConvertFrom-Json
+    $generatedJsonObject = $repoJson | ConvertFrom-Json
+    $existingCanonicalJson = ConvertTo-Json -InputObject $existingJsonObject -Depth 10 -Compress
+    $generatedCanonicalJson = ConvertTo-Json -InputObject $generatedJsonObject -Depth 10 -Compress
+    $writeRepoJson = $existingCanonicalJson -ne $generatedCanonicalJson
+}
+
+if ($writeRepoJson) {
+    Write-Utf8Text -Path $repoJsonPath -Text $repoJson
+    Write-Host "Updated repo index."
+} else {
+    Write-Host "Unchanged repo index."
+}
 
 Write-Host "Generated $repoJsonPath"
 Write-Host "Included plugins: $($entries.InternalName -join ', ')"

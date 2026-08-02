@@ -12,6 +12,10 @@ on:
       - 'tools/Build-DalamudRepo.ps1'
       - 'repo-config.json'
 
+concurrency:
+  group: dalamud-plugin-repo-sync
+  cancel-in-progress: false
+
 permissions:
   actions: read
   contents: write
@@ -23,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Clone source repositories
         shell: pwsh
@@ -105,5 +111,26 @@ jobs:
           }
 
           git commit -m "自动同步插件源"
-          git push
+
+          for ($attempt = 1; $attempt -le 3; $attempt++) {
+            git fetch origin master
+            if ($LASTEXITCODE -ne 0) {
+              throw 'Failed to fetch origin/master before push.'
+            }
+
+            git rebase origin/master
+            if ($LASTEXITCODE -ne 0) {
+              throw 'Automatic repo update conflicted with a newer remote commit.'
+            }
+
+            git push origin HEAD:master
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host "Repo update pushed on attempt $attempt."
+              exit 0
+            }
+
+            Start-Sleep -Seconds (3 * $attempt)
+          }
+
+          throw 'Failed to push repo update after 3 attempts.'
 

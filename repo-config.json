@@ -1,1 +1,21 @@
-{ "excludedInternalNames": [] }
+{
+  "excludedInternalNames": [],
+  "projects": [
+    {
+      "internalName": "CharacterPanelRefined",
+      "directory": "ffxiv-characterstatus-refined"
+    },
+    {
+      "internalName": "BossMod",
+      "directory": "ffxiv_bossmod"
+    },
+    {
+      "internalName": "ICECN",
+      "directory": "Ices-Cosmic-Exploration"
+    },
+    {
+      "internalName": "ReMakePlacePlugin",
+      "directory": "ReMakePalce"
+    }
+  ]
+}
