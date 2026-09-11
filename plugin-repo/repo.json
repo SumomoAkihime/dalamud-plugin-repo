@@ -35,7 +35,7 @@
     "Author": "veyn",
     "Name": "Boss Mod",
     "InternalName": "BossMod",
-    "AssemblyVersion": "7.5.5.5205",
+    "AssemblyVersion": "7.5.5.5206",
     "TestingAssemblyVersion": "7.5.5.5203",
     "Description": "Integrated Boss encounter toolkit with radar, mechanic hints, and combat assistance.",
     "ApplicableVersion": "any",
@@ -61,7 +61,7 @@
     "DownloadLinkInstall": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
     "DownloadLinkUpdate": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/latest.zip",
     "DownloadLinkTesting": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/BossMod/testing.zip",
-    "LastUpdate": 1788968744,
+    "LastUpdate": 1789133817,
     "ImageUrls": [
       "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image1.png",
       "https://raw.githubusercontent.com/SumomoAkihime/ffxiv_bossmod/master/Data/image2.png",
