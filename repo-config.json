@@ -2,6 +2,10 @@
   "excludedInternalNames": [],
   "projects": [
     {
+      "internalName": "InventoryTools",
+      "directory": "InventoryTools_CN"
+    },
+    {
       "internalName": "CharacterPanelRefined",
       "directory": "ffxiv-characterstatus-refined"
     },

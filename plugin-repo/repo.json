@@ -119,5 +119,38 @@
         "LastUpdate":  1785655496,
         "IconUrl":  "https://raw.githubusercontent.com/ReMakePlace/Plugin/master/icon.png",
         "AcceptsFeedback":  true
+    },
+    {
+        "Author": "Critical_Impact&Sumomo",
+        "Name": "Allagan Tools",
+        "InternalName": "InventoryTools",
+        "AssemblyVersion": "1.15.1.101",
+        "Description": "Allagan Tools 国服适配与中文界面版本，可追踪角色、雇员、部队及住宅的物品库存，通过筛选系统查找物品并规划存放位置。\n\n主要功能包括：\n\t- 制作规划、材料拆解与库存核对\n\t- 查询 Universalis 市场价格\n\t- 搜索、整理和备料时高亮库存物品\n\t- 查询物品商人、获取来源及用途\n\t- 搜索副本、怪物、飞空艇和潜水艇资料\n\t- 使用筛选器组合复杂搜索条件\n\t- 在游戏物品提示中显示持有位置及数量\n\n国服适配与界面汉化由 Sumomo 维护，原作者为 Critical_Impact。",
+        "ApplicableVersion": "any",
+        "RepoUrl": "https://github.com/SumomoAkihime/InventoryTools_CN",
+        "Tags": [
+            "Inventory",
+            "Sorting",
+            "Filtering"
+        ],
+        "DalamudApiLevel": 15,
+        "LoadRequiredState": 0,
+        "LoadSync": false,
+        "CanUnloadAsync": false,
+        "LoadPriority": 0,
+        "Punchline": "追踪库存、搜索物品、辅助整理与规划制作，并查询怪物、副本、飞空艇及潜水艇资料。",
+        "Changelog": "国服适配与中文界面首发。修复库存扫描特征码，中文化设置、图鉴、物品提示、向导和命令帮助，保留已有配置、旧命令及导出字段兼容。作者追加 Sumomo。",
+        "DownloadLinkInstall": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/InventoryTools/latest.zip",
+        "DownloadLinkUpdate": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/InventoryTools/latest.zip",
+        "LastUpdate": 1794656771,
+        "ImageUrls": [
+            "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/banner1.png",
+            "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/screenshot1.png",
+            "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/screenshot2.png",
+            "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/screenshot3.png",
+            "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/screenshot4.png"
+        ],
+        "IconUrl": "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/icon.png",
+        "AcceptsFeedback": true
     }
 ]

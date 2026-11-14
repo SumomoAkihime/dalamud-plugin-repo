@@ -37,6 +37,7 @@ jobs:
           if (Test-Path $sourcesRoot) { Remove-Item $sourcesRoot -Recurse -Force }
           New-Item -ItemType Directory -Path $sourcesRoot -Force | Out-Null
 
+          git clone --depth 1 https://github.com/SumomoAkihime/InventoryTools_CN.git (Join-Path $sourcesRoot 'InventoryTools_CN')
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv-characterstatus-refined.git (Join-Path $sourcesRoot 'ffxiv-characterstatus-refined')
           git clone --depth 1 https://github.com/SumomoAkihime/ffxiv_bossmod.git (Join-Path $sourcesRoot 'ffxiv_bossmod')
           git clone --depth 1 https://github.com/SumomoAkihime/ReMakePalce.git (Join-Path $sourcesRoot 'ReMakePalce')
