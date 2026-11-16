@@ -152,5 +152,29 @@
         ],
         "IconUrl": "https://raw.githubusercontent.com/SumomoAkihime/InventoryTools_CN/main/InventoryTools/Images/icon.png",
         "AcceptsFeedback": true
+    },
+    {
+        "Author": "Taurenkey (Puni.sh)&Sumomo",
+        "Name": "Artisan",
+        "InternalName": "Artisan",
+        "AssemblyVersion": "4.0.5.24",
+        "Description": "集自动制作、宏管理、制作列表、专家配方求解和模拟器于一体的制作插件。",
+        "ApplicableVersion": "any",
+        "RepoUrl": "https://github.com/SumomoAkihime/Artisan_cn",
+        "Tags": [
+            "crafting"
+        ],
+        "DalamudApiLevel": 15,
+        "LoadRequiredState": 0,
+        "LoadSync": false,
+        "CanUnloadAsync": false,
+        "LoadPriority": 0,
+        "IconUrl": "https://s3.puni.sh/media/plugin/6/icon-3h8wd5b9qr.png",
+        "Punchline": "一款“简单”的自动制作插件。",
+        "Changelog": "简体中文界面首发，汉化设置、宏、制作列表、专家配方、模拟器及常用提示。兼容英文原版宏和求解器 IPC 名称。作者追加 Sumomo。",
+        "AcceptsFeedback": true,
+        "DownloadLinkInstall": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/Artisan/latest.zip",
+        "DownloadLinkUpdate": "https://raw.githubusercontent.com/SumomoAkihime/dalamud-plugin-repo/master/plugin-repo/plugins/Artisan/latest.zip",
+        "LastUpdate": 1794826845
     }
 ]
